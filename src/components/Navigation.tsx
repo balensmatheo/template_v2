@@ -154,7 +154,7 @@ export default function Navigation() {
                                     </ListItem>
                                 </Link>
                                 <Link style={{textDecoration: "none"}} to={"/data/banque"}>
-                                    <ListItem  sx={{mb: "1em", display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                    <ListItem  sx={{mb: ".2em", display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                                         <ListItemButton
                                             selected={index === 5}
                                             variant={index === 5 ? 'soft' : 'plain'}

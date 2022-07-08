@@ -1,0 +1,47 @@
+{
+  "homepage": "https://balensmatheo.github.io/template_v2",
+  "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/base": "^5.0.0-alpha.88",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/joy": "latest",
+    "@mui/material": "^5.8.7",
+    "@mui/system": "latest",
+    "@testing-library/react": "^13.3.0",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "axios": "^0.27.2",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "^6.3.0",
+    "typescript": "latest",
+    "web-vitals": "^2.1.4"
+  },
+  "description": "https://github.com/mui/material-ui/blob/v5.8.7/docs/data/joy/templates/files/App.tsx",
+  "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "react-scripts": "^5.0.1"
+  },
+  "main": "index.tsx",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --coverage",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

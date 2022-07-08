@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/template_v2/static/css/main.e6c13ad2.css",
+    "main.js": "/template_v2/static/js/main.85aa6fd8.js",
+    "static/media/logo_dn_v2(1).jpg": "/template_v2/static/media/logo_dn_v2(1).a532d07b6e3731814adc.jpg",
+    "index.html": "/template_v2/index.html",
+    "main.e6c13ad2.css.map": "/template_v2/static/css/main.e6c13ad2.css.map",
+    "main.85aa6fd8.js.map": "/template_v2/static/js/main.85aa6fd8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.85aa6fd8.js"
+  ]
+}

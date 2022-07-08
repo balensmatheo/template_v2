@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import { StyledEngineProvider } from '@mui/joy/styles';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import Dashboard from "./components/Dashboard/Dashboard";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,9 +14,7 @@ root.render(
         <React.StrictMode>
             <BrowserRouter>
             <StyledEngineProvider injectFirst>
-                <Routes>
-                    <Route path="*" element={<App/>}/>
-                </Routes>
+                <App/>
             </StyledEngineProvider>
             </BrowserRouter>
         </React.StrictMode>

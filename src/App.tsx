@@ -148,7 +148,7 @@ export default function App() {
                 <Layout.Main>
                     <Box sx={{width: '100%'}}>
                         <Routes>
-                            <Route path="/" element={<Dashboard/>} />
+                            <Route path="*" element={<Dashboard/>} />
                             <Route path="/import-data" element={<Import/>} />
                             <Route path="/data/achats" element={<Achats/>}/>
                             <Route path="/data/factures" element={<Factures/>}/>

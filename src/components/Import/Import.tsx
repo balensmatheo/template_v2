@@ -24,6 +24,7 @@ export default function Import() {
                     <Button startIcon={<UploadFileRounded />} color={"primary"} variant="soft" size={"md"} component="span">
                         Importer
                     </Button>
+                    Test pour le gigit
                 </label>
             </Box>
         </Box>

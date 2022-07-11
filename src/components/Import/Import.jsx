@@ -16,6 +16,7 @@ import {useDropzone} from "react-dropzone";
 import {Divider} from "@mui/material";
 import {HistoryRounded} from "@mui/icons-material";
 import "./Import.css"
+import History from "./History";
 
 function DropComponent(){
     const [files, setFiles] = useState([]);
@@ -72,47 +73,7 @@ export default function Import() {
     )
 }
 
-function History(){
-    return (
-        <Box sx={{
-            display: 'flex',
-            width: "100%",
-            mt: 2,
-            borderRadius: 'xs'
-        }}>
-            <Box
-                sx={{
-                    border: '1px solid',
-                    borderColor: 'background.level2',
-                    boxShadow: 'sm',
-                    width: "100%",
-                    borderRadius: 'md',
-                    overflow: 'auto',
-                }}
-            >
-                <Sheet sx={{
-                    borderWidth: '0 0 1px 0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    p: 2,
-                    borderBottom: '1px solid',
-                    borderColor: 'background.level2',
-                }}>
-                    <Typography startDecorator={<HistoryRounded sx={{mb:.5, mr: .5, color:"rgba(97,97,97,0.85)"}}/>} sx={{color: "rgba(97,97,97,0.85)"}} fontWeight={600} level={"h5"} variant={"plain"} >
-                        Historique
-                    </Typography>
-                </Sheet>
-                <Sheet sx={{
-                    display: 'flex',
-                    p: 2,
-                }}>
-                    <Typography sx={{color:"rgba(95,95,95,0.8)"}} >Documents importés précédemment : </Typography>
-                </Sheet>
-            </Box>
 
-        </Box>
-    )
-}
 
 function InputBox() {
     return (

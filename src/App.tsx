@@ -6,7 +6,7 @@ import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import Logo from "./assets/logo_dn_v2(1).jpg"
-
+import "./App.css"
 // Icons import
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -113,9 +113,9 @@ export default function App() {
                             sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
                             onClick={() => navigate('/')}
                         >
-                            <img style={{width: "75px"}} src={Logo} alt={"Decision network logo"}/>
+                            <img onClick={() => window.location.reload()} style={{width: "75px"}} src={Logo} alt={"Decision network logo"}/>
                         </IconButton>
-                        <Typography marginLeft={"1rem"} fontSize={"22pt"} fontWeight="700">
+                        <Typography className={"main-title"} onClick={() => navigate("*")} marginLeft={"1rem"} fontSize={"22pt"} fontWeight="700">
                             Espace Facturation
                         </Typography>
                     </Box>
@@ -134,7 +134,7 @@ export default function App() {
                             }
                             menus={[
                                 {
-                                    label: 'About',
+                                    label: 'A propos',
                                     href: '/infos',
                                 },
                             ]}

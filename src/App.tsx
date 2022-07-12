@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { GlobalStyles } from '@mui/system';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import type { Theme } from '@mui/joy/styles';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
@@ -18,19 +17,166 @@ import MenuIcon from '@mui/icons-material/Menu';
 // custom
 import filesTheme from './theme';
 import Menu from './components/Menu';
+import { deepmerge } from "@mui/utils";
 import Layout from './components/Layout';
 import Navigation from './components/Navigation';
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Achats from "./components/Data/Achats";
+import type {} from "@mui/material/themeCssVarsAugmentation";
 import Tools from "./Tools/Tools";
 import Import from "./components/Import/Import";
 import Infos from "./components/About/Infos";
 import Factures from "./components/Data/Factures";
 import Banque from "./components/Data/Banque";
 import Dashboard from "./components/Dashboard/Dashboard";
-import {Divider, Link} from "@mui/material";
+import {Button, Divider, Link, TypeBackground} from "@mui/material";
 import {useEffect, useState} from "react";
+import {
+    experimental_extendTheme as extendMuiTheme,
+    PaletteColor,
+    TypeText,
+    TypeAction,
+    Overlays,
+    Theme as MuiTheme,
+    Palette as MuiPalette,
+    PaletteColorChannel,
+    // PaletteAlert,
+    PaletteAppBar,
+    PaletteAvatar,
+    PaletteChip,
+    PaletteFilledInput,
+    PaletteLinearProgress,
+    PaletteSlider,
+    // PaletteSkeleton,
+    PaletteSnackbarContent,
+    // PaletteSpeedDialAction,
+    PaletteStepConnector,
+    PaletteStepContent,
+    PaletteSwitch,
+    PaletteTableCell,
+    PaletteTextChannel,
+    PaletteTooltip
+} from "@mui/material/styles";
 
+import colors from "@mui/joy/colors";
+import {
+    extendTheme as extendJoyTheme,
+    CssVarsProvider,
+    useColorScheme,
+    Theme as JoyTheme
+} from "@mui/joy/styles";
+import {CommonColors} from "@mui/material/styles/createPalette";
+
+declare module "@mui/joy/styles" {
+    interface Palette {
+        secondary: PaletteColorChannel;
+        error: PaletteColorChannel;
+        dividerChannel: string;
+        action: TypeAction;
+        // Material UI components
+        // Alert: PaletteAlert;
+        AppBar: PaletteAppBar;
+        Avatar: PaletteAvatar;
+        Chip: PaletteChip;
+        FilledInput: PaletteFilledInput;
+        LinearProgress: PaletteLinearProgress;
+        // Skeleton: PaletteSkeleton;
+        Slider: PaletteSlider;
+        SnackbarContent: PaletteSnackbarContent;
+        // SpeedDialAction: PaletteSpeedDialAction;
+        StepConnector: PaletteStepConnector;
+        StepContent: PaletteStepContent;
+        Switch: PaletteSwitch;
+        TableCell: PaletteTableCell;
+        Tooltip: PaletteTooltip;
+    }
+    interface PalettePrimary extends PaletteColor {}
+    interface PaletteInfo extends PaletteColor {}
+    interface PaletteSuccess extends PaletteColor {}
+    interface PaletteWarning extends PaletteColor {}
+    interface PaletteCommon extends CommonColors {}
+    interface PaletteText extends TypeText {}
+    interface PaletteBackground extends TypeBackground {}
+
+    interface ThemeScales {
+        // apply to `theme` and `theme.vars`
+        // overlays: Overlays;
+        zIndex: MuiTheme["zIndex"];
+    }
+}
+
+declare module "@mui/material/styles" {
+    interface Theme {
+        vars: JoyTheme["vars"];
+    }
+}
+
+
+const muiTheme = extendMuiTheme({
+    cssVarPrefix: "joy",
+    colorSchemes: {
+        light: {
+            palette: {
+                primary: {
+                    main: colors.blue[500]
+                },
+                grey: colors.grey,
+                error: {
+                    main: colors.red[500]
+                },
+                info: {
+                    main: colors.purple[500]
+                },
+                success: {
+                    main: colors.green[500]
+                },
+                warning: {
+                    main: colors.yellow[200]
+                },
+                common: {
+                    white: "#FFF",
+                    black: "#09090D"
+                },
+                divider: colors.grey[200],
+                text: {
+                    primary: colors.grey[800],
+                    secondary: colors.grey[600]
+                }
+            }
+        },
+        dark: {
+            palette: {
+                primary: {
+                    main: colors.blue[600]
+                },
+                grey: colors.grey,
+                error: {
+                    main: colors.red[600]
+                },
+                info: {
+                    main: colors.purple[600]
+                },
+                success: {
+                    main: colors.green[600]
+                },
+                warning: {
+                    main: colors.yellow[300]
+                },
+                common: {
+                    white: "#FFF",
+                    black: "#09090D"
+                },
+                divider: colors.grey[800],
+                text: {
+                    primary: colors.grey[100],
+                    secondary: colors.grey[300]
+                }
+            }
+        }
+    }
+});
+
+const joyTheme = extendJoyTheme();
 
 function ColorSchemeToggle() {
     const { mode, setMode } = useColorScheme();
@@ -43,6 +189,7 @@ function ColorSchemeToggle() {
     }
     return (
         <IconButton
+            sx={{mr: 3}}
             id="toggle-mode"
             size="sm"
             variant="outlined"
@@ -65,7 +212,7 @@ export default function App() {
     const navigate = useNavigate();
 
     return (
-        <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
+        <CssVarsProvider disableTransitionOnChange theme={deepmerge(muiTheme, joyTheme)}>
             <GlobalStyles<Theme>
                 styles={(theme) => ({
                     body: {
@@ -122,33 +269,12 @@ export default function App() {
                             borderColor: 'background.level2',
                         }}>
                             <Typography className={"main-title"} onClick={() => navigate("/")} marginLeft={"1rem"}
-                                        fontSize={"calc(13px + 3.3vmin)"} fontWeight="700">
+                                        fontSize={"calc(10px + 3.3vmin)"} fontWeight="600">
                                 Espace Facturation
                             </Typography>
                         </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
-                        <Menu
-                            id="app-selector"
-                            control={
-                                <IconButton
-                                    size="sm"
-                                    variant="outlined"
-                                    color="primary"
-                                    aria-label="applications"
-                                >
-                                    <GridViewRoundedIcon />
-                                </IconButton>
-                            }
-                            menus={[
-                                {
-                                    label: 'A propos',
-                                    href: '/infos',
-                                },
-                            ]}
-                        />
-                        <ColorSchemeToggle />
-                    </Box>
+                    <ColorSchemeToggle />
                 </Layout.Header>
                 <Layout.SideNav>
                     <Navigation />

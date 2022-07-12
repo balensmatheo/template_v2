@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 2.3em;
+    justify-content: center;
+    height: 20vh;
+    font-size: large;
 }
 
 .input-box:hover {

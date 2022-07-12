@@ -31,7 +31,7 @@ const Header = (props: BoxProps) => (
             {
                 p: 2,
                 gap: 2,
-                bgcolor: 'background.componentBg',
+                bgcolor: 'background.appBody',
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -41,7 +41,7 @@ const Header = (props: BoxProps) => (
                 borderColor: 'divider',
                 position: 'sticky',
                 top: 0,
-                zIndex: 1100,
+                zIndex: 1000,
             },
             ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
         ]}

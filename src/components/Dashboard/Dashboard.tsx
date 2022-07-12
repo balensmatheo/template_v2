@@ -1,25 +1,63 @@
-import Box from "@mui/joy/Box";
+import * as React from 'react';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Chart from './Chart';
+import Deposits from './Deposits';
+import Orders from './Orders';
 import Typography from "@mui/joy/Typography";
-import { Divider } from "@mui/material";
+import Box from "@mui/joy/Box";
+import {Divider} from "@mui/material";
 
-export default function Dashboard() {
+// Contenu du Dashboard
+function DashboardContent() {
+    const [open, setOpen] = React.useState(true);
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-                p: ".5"
-            }}
-        >
-            <Box
-                sx={{
-                    flexDirection: "row",
-                }}
-            >
-                <Typography fontSize={"22pt"} fontWeight={700}>Tableau de bord</Typography>
-                <Divider/>
+        <Box>
+            <Typography fontWeight={500} fontSize={"calc(10px + 3.3vmin)"} gutterBottom>Tableau de bord <Divider sx={{mb: 2}}/></Typography>
+            <Box>
+                <Grid sx={{display: 'flex', justifyContent: "center", width: "100%"}} container spacing={3}>
+                    {/* Graphique */}
+                    <Grid item xs={11} md={8} lg={8}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 240,
+                            }}
+                        >
+                            <Chart/>
+                        </Paper>
+                    </Grid>
+                    {/* Dépots récents */}
+                    <Grid item xs={11} md={4} lg={3}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 240,
+                            }}
+                        >
+                            <Deposits/>
+                        </Paper>
+                    </Grid>
+                    {/* Achats récents */}
+                    <Grid item xs={11}>
+                        <Paper sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
+                            <Orders/>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </Box>
         </Box>
     );
 }
 
+export default function Dashboard() {
+    return <DashboardContent />;
+}

@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/template_v2/static/css/main.79d7ef8e.css",
-    "main.js": "/template_v2/static/js/main.97c5e842.js",
+    "main.css": "/template_v2/static/css/main.5e0d332f.css",
+    "main.js": "/template_v2/static/js/main.0034af22.js",
     "static/media/logo_dn.png": "/template_v2/static/media/logo_dn.42bb8047a2f2bce63035.png",
     "index.html": "/template_v2/index.html",
-    "main.79d7ef8e.css.map": "/template_v2/static/css/main.79d7ef8e.css.map",
-    "main.97c5e842.js.map": "/template_v2/static/js/main.97c5e842.js.map"
+    "main.5e0d332f.css.map": "/template_v2/static/css/main.5e0d332f.css.map",
+    "main.0034af22.js.map": "/template_v2/static/js/main.0034af22.js.map"
   },
   "entrypoints": [
-    "static/css/main.79d7ef8e.css",
-    "static/js/main.97c5e842.js"
+    "static/css/main.5e0d332f.css",
+    "static/js/main.0034af22.js"
   ]
 }

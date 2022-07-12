@@ -7,18 +7,20 @@ import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
 import Close from '@mui/icons-material/Close';
 import Delete from '@mui/icons-material/Delete';
-import Download from '@mui/icons-material/Download';
 import InsertLink from '@mui/icons-material/InsertLink';
-import Crop from '@mui/icons-material/Crop';
-import {Input} from "@mui/joy";
 import {useCallback, useEffect, useState} from "react";
 import {useDropzone} from "react-dropzone";
 import {Divider} from "@mui/material";
-import {HistoryRounded} from "@mui/icons-material";
 import "./Import.css"
 import History from "./History";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
+import ListItemButton from "@mui/joy/ListItemButton";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
 
-function DropComponent(){
+
+
+function DropComponent(props){
     const [files, setFiles] = useState([]);
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -32,30 +34,56 @@ function DropComponent(){
         getInputProps
     } = useDropzone({
         onDrop,
-        accept: "application/vnd.oasis.opendocument.spreadsheet, application/vnd.ms-excel, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     });
 
     useEffect(() => () => {
         files.forEach(file => URL.revokeObjectURL(file.preview));
     }, [files]);
 
-
+    function deleteFile(file){
+        setFiles(files.filter(f => f !== file));
+    }
 
     const thumbs = files.map(file => (
-        <div key={file.name}>
-            <img
-                src={file.preview}
-                alt={file.name}
-            />
-        </div>
-    ));
+        <Box sx={{display: 'flex', flexDirection: "column", alignItems: 'center', width: '100%'}}
+             key={file.name}>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: "center",
+                borderBottom: "1px solid ",
+                borderColor: 'background.level3',
+                width: "100%",
+            }}>
+                <Typography flex={"1 1 auto"} p={1}>{file.name}</Typography>
+                <IconButton sx={{mr: 1, p: 1}} size={"sm"} color={"neutral"}>
+                    <Close fontSize={"small"} sx={{color: "red"}} onClick={() => deleteFile(file)}/>
+                </IconButton>
+
+            </Box>
+            </Box>
+        ));
+
+    if(props.delete===true){
+        files.length=0;
+    }
+
+    useEffect(() => () => {
+        files.forEach(file => URL.revokeObjectURL(file.preview));
+    }, [files]);
+
     return (
-        <Box className={"input-box"} {...getRootProps()}>
-            <input {...getInputProps()} />
-                <Typography className={"input-box"}>Déposez vos fichiers ici</Typography>
-            <aside>
-                {thumbs}
-            </aside>
+        <Box>
+            {files.length === 0 ?
+                <Box className={"input-box"} {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <Typography sx={{color: "#535353"}} className={"input-box"}>Déposez vos fichiers ici</Typography>
+                </Box>
+                :
+                <Box>
+                    {thumbs}
+                </Box>
+            }
         </Box>
     )
 }
@@ -76,6 +104,8 @@ export default function Import() {
 
 
 function InputBox() {
+    const [deleted, setDeleted] = useState(false);
+
     return (
             <Box
                 sx={{
@@ -118,13 +148,12 @@ function InputBox() {
                             variant="outlined"
                             sx={{
                                 borderRadius: 'md',
-                                overflow: 'auto',
                                 borderColor: 'background.level2',
                                 bgcolor: 'background.level1',
                             }}
                         >
                             <AspectRatio className={"ratio"}>
-                                <DropComponent/>
+                                <DropComponent delete={deleted}/>
                             </AspectRatio>
                             <Box
                                 sx={{
@@ -139,11 +168,9 @@ function InputBox() {
                                     variant="plain"
                                     size="sm"
                                     sx={{mr: 'auto'}}
+                                    onClick={() => setDeleted(!deleted)}
                                 >
                                     <Delete/>
-                                </IconButton>
-                                <IconButton color="neutral" variant="outlined" size="sm">
-                                    <Download/>
                                 </IconButton>
                                 <IconButton color="neutral" variant="outlined" size="sm">
                                     <InsertLink/>
@@ -160,7 +187,7 @@ function InputBox() {
                             gap: 1,
                         }}
                     >
-                        <Button size="md">Upload</Button>
+                        <Button size="md">Importer</Button>
                     </Sheet>
                 </Box>
             </Box>

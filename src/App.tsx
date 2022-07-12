@@ -5,8 +5,9 @@ import type { Theme } from '@mui/joy/styles';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
-import Logo from "./assets/logo_dn_v2(1)(1).jpg";
+import Logo from "./assets/logo_dn.png";
 import "./App.css"
+
 // Icons import
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -27,13 +28,14 @@ import Infos from "./components/About/Infos";
 import Factures from "./components/Data/Factures";
 import Banque from "./components/Data/Banque";
 import Dashboard from "./components/Dashboard/Dashboard";
-import {Link} from "@mui/material";
+import {Divider, Link} from "@mui/material";
+import {useEffect, useState} from "react";
 
 
 function ColorSchemeToggle() {
     const { mode, setMode } = useColorScheme();
-    const [mounted, setMounted] = React.useState(false);
-    React.useEffect(() => {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
         setMounted(true);
     }, []);
     if (!mounted) {
@@ -59,7 +61,7 @@ function ColorSchemeToggle() {
 }
 
 export default function App() {
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
     const navigate = useNavigate();
 
     return (
@@ -109,15 +111,21 @@ export default function App() {
                         </IconButton>
                         <IconButton
                             size="sm"
-                            variant="solid"
-                            sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+                            variant="plain"
+                            sx={{ display: { xs: 'none', sm: 'inline-flex' }}}
                             onClick={() => navigate('/')}
                         >
                             <img onClick={() => window.location.reload()} style={{width: "75px"}} src={Logo} alt={"Decision network logo"}/>
                         </IconButton>
-                        <Typography className={"main-title"} onClick={() => navigate("/")} marginLeft={"1rem"} fontSize={"22pt"} fontWeight="700">
-                            Espace Facturation
-                        </Typography>
+                        <Box sx={{
+                            borderLeft: '1px solid',
+                            borderColor: 'background.level2',
+                        }}>
+                            <Typography className={"main-title"} onClick={() => navigate("/")} marginLeft={"1rem"}
+                                        fontSize={"calc(13px + 3.3vmin)"} fontWeight="700">
+                                Espace Facturation
+                            </Typography>
+                        </Box>
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
                         <Menu

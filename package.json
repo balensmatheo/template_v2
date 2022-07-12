@@ -1,12 +1,12 @@
 {
   "homepage": "https://balensmatheo.github.io/template_v2",
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@mui/base": "^5.0.0-alpha.88",
-    "@mui/icons-material": "^5.8.4",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/base": "latest",
+    "@mui/icons-material": "latest",
     "@mui/joy": "latest",
-    "@mui/material": "^5.8.7",
+    "@mui/material": "latest",
     "@mui/system": "latest",
     "@testing-library/react": "^13.3.0",
     "@types/react": "latest",
@@ -16,6 +16,8 @@
     "react-dom": "latest",
     "react-dropzone": "^11.2.4",
     "react-router-dom": "^6.3.0",
+    "recharts": "^2.1.12",
+    "styled-components": "^5.3.5",
     "typescript": "latest",
     "web-vitals": "^2.1.4"
   },

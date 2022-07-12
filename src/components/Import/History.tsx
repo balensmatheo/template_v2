@@ -3,10 +3,28 @@ import Sheet from "@mui/joy/Sheet";
 import Typography from "@mui/joy/Typography";
 import {HistoryRounded} from "@mui/icons-material";
 import * as React from "react";
-import {Table, TableCell, tableCellClasses, TableContainer, TableHead, TableRow} from "@mui/material";
-import {styled} from "@mui/joy/styles";
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 
 export default function History(){
+
+    function createData(
+        name: string,
+        calories: number,
+        fat: number,
+        carbs: number,
+        protein: number,
+    ) {
+        return { name, calories, fat, carbs, protein };
+    }
+
+    const rows = [
+        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+        createData('Eclair', 262, 16.0, 24, 6.0),
+        createData('Cupcake', 305, 3.7, 67, 4.3),
+        createData('Gingerbread', 356, 16.0, 49, 3.9),
+    ];
+
     return (
         <Box sx={{
             display: 'flex',
@@ -32,7 +50,7 @@ export default function History(){
                     borderBottom: '1px solid',
                     borderColor: 'background.level2',
                 }}>
-                    <Typography startDecorator={<HistoryRounded sx={{mb:.5, mr: .5, color:"rgba(90,90,90,0.85)"}}/>} sx={{color: "rgba(65,65,65,0.85)"}} fontWeight={600} level={"h5"} variant={"plain"} >
+                    <Typography startDecorator={<HistoryRounded sx={{mb:0.3, mr: .5, color:"rgba(76,76,76,0.85)"}}/>} sx={{color: "rgba(46,46,46,0.85)"}} fontWeight={600} level={"h5"} variant={"plain"} >
                         Historique
                     </Typography>
                 </Sheet>
@@ -42,15 +60,6 @@ export default function History(){
                     p: 2,
                 }}>
                     <Typography sx={{color:"rgba(95,95,95,0.8)"}} >Documents importés précédemment : </Typography>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell className={tableCellClasses.root}>oui</TableCell>
-                                </TableRow>
-                            </TableHead>
-                        </Table>
-                    </TableContainer>
                 </Sheet>
             </Box>
         </Box>

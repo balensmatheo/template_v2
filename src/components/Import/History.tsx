@@ -3,7 +3,7 @@ import Sheet from "@mui/joy/Sheet";
 import Typography from "@mui/joy/Typography";
 import {HistoryRounded} from "@mui/icons-material";
 import * as React from "react";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@mui/material";
+import {Table, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@mui/material";
 
 export default function History(){
     const [page, setPage] = React.useState(0);
@@ -88,7 +88,6 @@ export default function History(){
                     flexDirection: 'column',
                     p: 2,
                 }}>
-                    <Typography sx={{color:"rgba(95,95,95,0.8)"}} >Documents importés précédemment : </Typography>
                         <TableContainer>
                             <Table stickyHeader size="small">
                                 <TableHead>

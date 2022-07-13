@@ -16,8 +16,9 @@ function DashboardContent() {
         setOpen(!open);
     };
     return (
-        <Box>
-            <Typography fontWeight={500} fontSize={"calc(10px + 3.3vmin)"} gutterBottom>Tableau de bord <Divider sx={{mb: 2}}/></Typography>
+        <Box p={1}>
+            <Typography fontWeight={500} fontSize={"calc(10px + 3.3vmin)"} gutterBottom>Tableau de bord </Typography>
+            <Divider sx={{mb: 2}}></Divider>
             <Box>
                 <Grid sx={{display: 'flex', justifyContent: "center", width: "100%"}} container spacing={3}>
                     {/* Graphique */}

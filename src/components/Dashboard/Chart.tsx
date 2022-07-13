@@ -54,7 +54,7 @@ export default function Chart() {
                                 ...theme.typography.body1,
                             }}
                         >
-                            Purchases ($)
+                            Ventes (€)
                         </Label>
                     </YAxis>
                     <Line

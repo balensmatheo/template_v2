@@ -10,27 +10,30 @@ import Delete from '@mui/icons-material/Delete';
 import InsertLink from '@mui/icons-material/InsertLink';
 import {useCallback, useEffect, useState} from "react";
 import {useDropzone} from "react-dropzone";
-import {Divider, Tooltip} from "@mui/material";
+import {Divider, FormControl, InputLabel, MenuItem, Select, Tooltip} from "@mui/material";
 import "./Import.css"
 import History from "./History";
 import {InsertDriveFileRounded} from "@mui/icons-material";
-
 
 
 function DropComponent(props){
     const [files, setFiles] = useState([]);
 
     const onDrop = useCallback((acceptedFiles) => {
+        console.log(acceptedFiles);
         setFiles(acceptedFiles.map((file) => Object.assign(file, {
             preview: URL.createObjectURL(file)
         })));
     }, []);
+
+
 
     const {
         getRootProps,
         getInputProps
     } = useDropzone({
         onDrop,
+        accept: 'text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.oasis.opendocument.spreadsheet',
     });
 
     useEffect(() => () => {
@@ -56,7 +59,6 @@ function DropComponent(props){
                 <IconButton  onClick={() => deleteFile(file)} sx={{mr: 1, p: 1}} size={"sm"} color={"neutral"}>
                     <Close fontSize={"small"} sx={{color: "red"}}/>
                 </IconButton>
-
             </Box>
             </Box>
         ));
@@ -76,7 +78,7 @@ function DropComponent(props){
                 <IconButton sx={{mb:1}} variant={"plain"} color={"neutral"} size={"lg"}>
                     <InsertDriveFileRounded color={"disabled"} />
                 </IconButton>
-                <Typography fontWeight={400} sx={{color: "#666666"}}>Déposez vos fichiers ici</Typography>
+                <Typography fontWeight={400} sx={{color: "#666666"}}>Déposez vos fichiers ici (csv, ods, xls, xlsx)</Typography>
             </Box>
         )
     } else {
@@ -90,6 +92,7 @@ function DropComponent(props){
 }
 
 export default function Import() {
+
     return (
         <Box sx={{p: 0.5}}>
             <Box>
@@ -106,7 +109,11 @@ export default function Import() {
 
 function InputBox() {
     const [deleted, setDeleted] = useState(false);
+    const [table, setTable] = React.useState('');
 
+    const handleChange = (event) => {
+        setTable(event.target.value);
+    };
     return (
             <Box
                 sx={{
@@ -130,6 +137,31 @@ function InputBox() {
                         overflow: 'auto',
                     }}
                 >
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}>
+                        <FormControl fullWidth sx={{minWidth: "100px", mt: 3}}>
+                            <InputLabel size={"small"}>Sélectionnez la table correspondante</InputLabel>
+                            <Select
+                                sx={{p:1}}
+                                size={"small"}
+                                required={true}
+                                variant={"standard"}
+                                color={"secondary"}
+                                value={table}
+                                label="Table"
+                                onChange={handleChange}
+                            >
+                                    <MenuItem value={10}>Achats</MenuItem>
+                                    <MenuItem value={20}>Factures</MenuItem>
+                                    <MenuItem value={30}>Clients</MenuItem>
+                                    <MenuItem value={40}>Fournisseurs</MenuItem>
+                                    <MenuItem value={50}>Transactions bancaires</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+
                     <Sheet
                         sx={{
                             borderWidth: '0 0 1px 0',
@@ -140,9 +172,6 @@ function InputBox() {
                             borderColor: 'background.level2',
                         }}
                     >
-                        <Typography level="h2" fontSize="md">
-                            Importez les documents (csv, excel)
-                        </Typography>
                     </Sheet>
                     <Sheet sx={{p: 2}}>
                         <Sheet

@@ -11,10 +11,6 @@ import {Divider} from "@mui/material";
 
 // Contenu du Dashboard
 function DashboardContent() {
-    const [open, setOpen] = React.useState(true);
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
     return (
         <Box p={1}>
             <Typography fontWeight={500} fontSize={"calc(10px + 3.3vmin)"} gutterBottom>Tableau de bord </Typography>

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
 import IconButton from '@mui/joy/IconButton';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
@@ -10,11 +9,11 @@ import Delete from '@mui/icons-material/Delete';
 import InsertLink from '@mui/icons-material/InsertLink';
 import {useCallback, useEffect, useState} from "react";
 import {useDropzone} from "react-dropzone";
-import {Divider, FormControl, InputLabel, MenuItem, Select, Tooltip} from "@mui/material";
+import {Button, Divider, FormControl, InputLabel, MenuItem, Select, Tooltip} from "@mui/material";
 import "./Import.css"
 import History from "./History";
 import {InsertDriveFileRounded} from "@mui/icons-material";
-
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function DropComponent(props){
     const [files, setFiles] = useState([]);
@@ -78,7 +77,7 @@ function DropComponent(props){
                 <IconButton sx={{mb:1}} variant={"plain"} color={"neutral"} size={"lg"}>
                     <InsertDriveFileRounded color={"disabled"} />
                 </IconButton>
-                <Typography fontWeight={400} sx={{color: "#666666"}}>Déposez vos fichiers ici (csv, ods, xls, xlsx)</Typography>
+                <Typography textAlign={"center"} fontWeight={400} sx={{color: "#666666"}}>Déposez vos fichiers ici <br/> (csv, ods, xls, xlsx)</Typography>
             </Box>
         )
     } else {
@@ -110,10 +109,22 @@ export default function Import() {
 function InputBox() {
     const [deleted, setDeleted] = useState(false);
     const [table, setTable] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
     const handleChange = (event) => {
         setTable(event.target.value);
     };
+
+    function createRelativeTable(table){
+        setLoading(true);
+        // I want to wait 2 seconds
+        setTimeout(() => {
+            console.log(table);
+            setLoading(false);
+        }, 1000)
+        return(<div>Fni</div>)
+    }
+
     return (
             <Box
                 sx={{
@@ -141,7 +152,7 @@ function InputBox() {
                         display: 'flex',
                         justifyContent: 'center',
                     }}>
-                        <FormControl fullWidth sx={{minWidth: "100px", mt: 3}}>
+                        <FormControl color={"secondary"} fullWidth sx={{minWidth: "100px", mt: 3}}>
                             <InputLabel size={"small"}>Sélectionnez la table correspondante</InputLabel>
                             <Select
                                 sx={{p:1}}
@@ -161,18 +172,6 @@ function InputBox() {
                             </Select>
                         </FormControl>
                     </Box>
-
-                    <Sheet
-                        sx={{
-                            borderWidth: '0 0 1px 0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            p: 2,
-                            borderBottom: '1px solid',
-                            borderColor: 'background.level2',
-                        }}
-                    >
-                    </Sheet>
                     <Sheet sx={{p: 2}}>
                         <Sheet
                             variant="outlined"
@@ -219,7 +218,12 @@ function InputBox() {
                             gap: 1,
                         }}
                     >
-                        <Button size="md">Importer</Button>
+                        {
+                            !loading ?
+                                <Button onClick={() => createRelativeTable(table)} size="md">Importer</Button>
+                            :
+                                <LoadingButton size={"medium"} loading={loading}></LoadingButton>
+                        }
                     </Sheet>
                 </Box>
             </Box>

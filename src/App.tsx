@@ -25,7 +25,6 @@ import Achats from "./components/Data/Achats";
 import type {} from "@mui/material/themeCssVarsAugmentation";
 import Tools from "./Tools/Tools";
 import Import from "./components/Import/Import";
-import Infos from "./components/About/Infos";
 import Factures from "./components/Data/Factures";
 import Banque from "./components/Data/Banque";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -66,6 +65,7 @@ import {
     Theme as JoyTheme
 } from "@mui/joy/styles";
 import {CommonColors} from "@mui/material/styles/createPalette";
+import LogIn from "./components/LogIn/LogIn";
 
 declare module "@mui/joy/styles" {
     interface Palette {
@@ -210,6 +210,7 @@ function ColorSchemeToggle() {
 export default function App() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const navigate = useNavigate();
+    const [isloggedIn, setIsloggedIn] = useState(false);
 
     return (
         <CssVarsProvider disableTransitionOnChange theme={deepmerge(muiTheme, joyTheme)}>
@@ -277,20 +278,27 @@ export default function App() {
                     <ColorSchemeToggle />
                 </Layout.Header>
                 <Layout.SideNav>
-                    <Navigation />
+                    <Navigation loggedIn={isloggedIn}/>
                 </Layout.SideNav>
                 <Layout.Main>
-                    <Box sx={{width: '100%'}}>
-                        <Routes>
-                            <Route path="*" element={<Dashboard/>} />
-                            <Route path="/import-data" element={<Import/>} />
-                            <Route path="/data/achats" element={<Achats/>}/>
-                            <Route path="/data/factures" element={<Factures/>}/>
-                            <Route path="/data/banque" element={<Banque/>}/>
-                            <Route path="/tools" element={<Tools/>} />
-                            <Route path="/infos" element={<Infos/>}/>
-                        </Routes>
-                    </Box>
+
+                    {
+                        isloggedIn ?
+                            <Routes>
+                                <Route path="*" element={<Dashboard/>}/>
+                                <Route path="/import-data" element={<Import/>}/>
+                                <Route path="/data/achats" element={<Achats/>}/>
+                                <Route path="/data/factures" element={<Factures/>}/>
+                                <Route path="/data/banque" element={<Banque/>}/>
+                                <Route path="/tools" element={<Tools/>}/>
+                            </Routes>
+                            :
+                            <Routes>
+                                <Route path="*" element={<LogIn/>}/>
+                            </Routes>
+                    }
+
+
                 </Layout.Main>
 
                 <Layout.Footer>

@@ -339,8 +339,9 @@ export default function App() {
                         }
                     </Layout.Main>
                     <Layout.Footer>
-                        <Box>
+                        <Box sx={{display: 'flex', flexDirection: 'row', width: "100%"}}>
                             <Link underline={"none"} variant={"body2"} href="http://decision-network.eu/">Decision Network © 2022</Link>
+                            <Typography sx={{justifySelf: 'flex-end'}} level={"body2"}>v0.3</Typography>
                         </Box>
                     </Layout.Footer>
                 </Layout.Root>

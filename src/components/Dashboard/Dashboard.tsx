@@ -10,10 +10,10 @@ import Box from "@mui/joy/Box";
 import {Divider} from "@mui/material";
 
 // Contenu du Dashboard
-function DashboardContent() {
+function DashboardContent(props: any) {
     return (
         <Box p={1}>
-            <Typography fontWeight={500} fontSize={"calc(10px + 3.3vmin)"} gutterBottom>Tableau de bord </Typography>
+            <Typography fontWeight={500} fontSize={"calc(10px + 3.3vmin)"} gutterBottom>Tableau de bord</Typography>
             <Divider sx={{mb: 2}}></Divider>
             <Box>
                 <Grid sx={{display: 'flex', justifyContent: "center", width: "100%"}} container spacing={3}>

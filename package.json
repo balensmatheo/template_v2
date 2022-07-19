@@ -18,6 +18,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-dropzone": "^11.2.4",
+    "react-loading": "^2.0.3",
     "react-router-dom": "^6.3.0",
     "recharts": "^2.1.12",
     "styled-components": "^5.3.5",

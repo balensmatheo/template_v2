@@ -14,20 +14,25 @@ import {Link} from "react-router-dom";
 import {
     AccountBalance, AccountBalanceRounded,
     BuildRounded, CloudDownloadRounded, Dashboard, DashboardRounded, DataUsageRounded,
-    HomeRounded, KeyboardArrowRight, KeyboardArrowRightRounded, Login, Money, PeopleAltRounded,
+    HomeRounded, KeyboardArrowRight, KeyboardArrowRightRounded, Login, Logout, Money, PeopleAltRounded,
     ReceiptRounded,
 
     ShoppingCartRounded
 } from "@mui/icons-material";
+import {Auth} from "aws-amplify";
 
 export default function Navigation(props: any) {
     const [index, setIndex] = React.useState(0);
     const [open, setOpen] = React.useState(true);
     const [dataSubmenu, setDataSubmenu] = React.useState(false);
-    const [loggedIn, setLoggedIn] = React.useState(props.loggedIn);
 
 
-    if (loggedIn) {
+    async function logOut(){
+        await Auth.signOut();
+        window.location.reload();
+    }
+
+    if (props.loggedIn) {
         return (
             <List size="sm" sx={{'--List-item-radius': '8px'}}>
                 <ListItem nested sx={{p: 0}}>
@@ -233,6 +238,21 @@ export default function Navigation(props: any) {
                                     </ListItemButton>
                                 </ListItem>
                             </Link>
+                                <ListItem sx={{mb: ".5em"}}>
+                                    <ListItemButton
+                                        onClick={() => logOut()}
+                                        sx={{
+                                            '&:hover':{
+                                                bgcolor:'#fde8e7',
+                                            }
+                                        }}
+                                    >
+                                        <ListItemDecorator sx={{color: 'inherit'}}>
+                                            <Logout fontSize="medium"/>
+                                        </ListItemDecorator>
+                                        <ListItemContent sx={{mt: "0.2em"}}>Déconnexion</ListItemContent>
+                                    </ListItemButton>
+                                </ListItem>
                         </List>
                         :
                         undefined
@@ -283,7 +303,7 @@ export default function Navigation(props: any) {
                                 '& .JoyListItemButton-root': {p: '8px'},
                             }}
                         >
-                            <Link style={{textDecoration: "none"}} to={"/"}>
+                            <Link style={{textDecoration: "none"}} to={"/login"}>
                                 <ListItem sx={{mb: ".5em"}}>
                                     <ListItemButton
                                         selected={index === 0}

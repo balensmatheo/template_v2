@@ -1,14 +1,71 @@
 import Box from "@mui/joy/Box";
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import "./login.css";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/joy/Typography";
-import {Avatar, Checkbox, Link} from "@mui/joy";
-import {Button, Divider, TextField} from "@mui/material";
-import {useState, useEffect} from "react";
-import {Mail, Password, RememberMe} from "@mui/icons-material";
+import {Avatar, Link} from "@mui/joy";
+import {Divider, TextField} from "@mui/material";
+import {CheckCircle, Mail, Password} from "@mui/icons-material";
+import {Auth} from "aws-amplify";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {useNavigate} from "react-router-dom";
 
-export default function LogIn(props){
+export default function LogIn({onSignIn, getUser}) {
+
+    // Navigator
+    const navigate = useNavigate();
+
+    // States
+    const [mail, setMail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [challenge, setChallenge] = useState(false);
+    const [error, setError] = useState({state: false, value: ""});
+    const [newPassword, setNewPassword] = useState("");
+
+    // Functions
+    async function signIn() {
+        try {
+            setLoading(true);
+            const user = await Auth.signIn(mail, password)
+                .then(user => {
+                    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+                        setChallenge(true);
+                        setLoading(false)
+                    } else {
+                        onSignIn();
+                        setLoading(false)
+                        navigate("/");
+                    }
+                });
+            getUser(user);
+        } catch (e) {
+            console.log("Error while Sign-In : " + e);
+            setLoading(false);
+            setError({state: true, value: e.message});
+        }
+    }
+
+
+    async function changePassword() {
+        setLoading(true)
+        const user = await Auth.signIn(mail, password).then(
+            user => {
+                Auth.completeNewPassword(
+                    user,
+                    newPassword,
+                    {},
+                )
+            }
+        )
+        onSignIn();
+        getUser(user);
+        setChallenge(false);
+        setLoading(false);
+    }
+
+
+    // Rendering
     return(
         <Box>
             <Box className="header">
@@ -47,18 +104,61 @@ export default function LogIn(props){
                         </Box>
                         <Box sx={{width: "100%", display: "flex", flexDirection: 'column', mb: 2}}>
                             <Divider sx={{mb:2}} variant={"fullWidth"}/>
-                            <TextField margin={"normal"} variant={"standard"} size={"small"} name={"Email"} type={"email"} label={<Typography startDecorator={<Mail/>}>Email</Typography>}/>
-                            <TextField margin={"normal"} variant={"standard"} size={"small"} name={"Password"} type={"password"} label={<Typography startDecorator={<Password/>}>Password</Typography>}/>
+                            <TextField onChange={event => setMail(event.target.value)} value={mail} margin={"normal"} variant={"standard"} size={"small"} name={"Email"} type={"email"} label={<Typography startDecorator={<Mail/>}>Email</Typography>}/>
+                            <TextField helperText={error.value} error={error.state} onChange={event => setPassword(event.target.value)} value={password} margin={"normal"} variant={"standard"} size={"small"} name={"Password"} type={"password"} label={<Typography startDecorator={<Password/>}>Password</Typography>}/>
+                            {
+                                challenge ?
+                                    <Box sx={{display: "flex", flexDirection: "column"}}>
+                                        <TextField onChange={event => setNewPassword(event.target.value)}
+                                                   value={newPassword} margin={"normal"} variant={"standard"}
+                                                   size={"small"} type={"password"} label={"Nouveau mot de passe"}/>
+                                        <Box sx={{display: "flex", flexDiraction: "row", alignItems: "center", width: "100%", mt: 1}}>
+                                            <CheckCircle color={newPassword.length >= 8 ? "success" : "danger"}/>
+                                            <Typography sx={{ml: 1}}>8 caractères minimum</Typography>
+                                        </Box>
+                                        <Box sx={{display: "flex", flexDiraction: "row", alignItems: "center", width: "100%", mt: 1}}>
+                                            <CheckCircle color={newPassword.match(/[A-Z]/) ? "success" : "danger"}/>
+                                            <Typography sx={{ml: 1}}>Au moins une majuscule</Typography>
+                                        </Box>
+                                        <Box sx={{display: "flex", flexDiraction: "row", alignItems: "center", width: "100%", mt: 1}}>
+                                            <CheckCircle color={newPassword.match(/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/) ? "success" : "danger"}/>
+                                            <Typography sx={{ml: 1}}>Un caractère spécial</Typography>
+                                        </Box>
+                                    </Box>
+                                    :
+                                    undefined
+                            }
                         </Box>
-                        <Box sx={{display: "flex", flexDirection: 'column', width: "100%"}}>
-                            <Divider variant={'fullWidth'} sx={{mb: 2}}/>
-                            <Button sx={{
-                                bgcolor: "#9a2797",
-                                '&:hover': {
-                                    bgcolor: "rgba(154,39,151,0.53)",
-                                }
-                            }} variant={"contained"}>Connexion</Button>
-                        </Box>
+
+                                <Box sx={{display: "flex", flexDirection: 'column', width: "100%"}}>
+                                    <Divider variant={'fullWidth'} sx={{mb: 2}}/>
+                                    {
+                                        challenge ?
+                                            <LoadingButton loading={loading} sx={{
+                                                bgcolor: "#9a2797",
+                                                '&:hover': {
+                                                    bgcolor: "rgba(154,39,151,0.53)",
+                                                }
+                                            }}
+                                                           disabled={!newPassword.match(/[A-Z]/) || !newPassword.match(/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/) || newPassword.length < 8}
+                                                           variant={"contained"}
+                                                           onClick={changePassword}>
+                                                Mettre à jour le mot de passe
+                                            </LoadingButton>
+                                            :
+                                            <LoadingButton loading={loading} sx={{
+                                                bgcolor: "#9a2797",
+                                                '&:hover': {
+                                                    bgcolor: "rgba(154,39,151,0.53)",
+                                                }
+                                            }}
+                                                    variant={"contained"}
+                                                    onClick={() => signIn()}>
+                                                Connexion
+                                            </LoadingButton>
+                                    }
+                                </Box>
+
                         <Typography
                             fontSize="8pt"
                             sx={{ alignSelf: 'center' }}

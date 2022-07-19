@@ -8,15 +8,11 @@ import Logo from "./assets/logo_dn.png";
 import "./App.css"
 
 // Icons import
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
 import MenuIcon from '@mui/icons-material/Menu';
 
 // custom
-import filesTheme from './theme';
-import Menu from './components/Menu';
 import { deepmerge } from "@mui/utils";
 import Layout from './components/Layout';
 import Navigation from './components/Navigation';
@@ -28,8 +24,10 @@ import Import from "./components/Import/Import";
 import Factures from "./components/Data/Factures";
 import Banque from "./components/Data/Banque";
 import Dashboard from "./components/Dashboard/Dashboard";
-import {Button, Divider, Link, TypeBackground} from "@mui/material";
+import {Link, TypeBackground} from "@mui/material";
 import {useEffect, useState} from "react";
+import ReactLoading from 'react-loading';
+
 import {
     experimental_extendTheme as extendMuiTheme,
     PaletteColor,
@@ -66,6 +64,7 @@ import {
 } from "@mui/joy/styles";
 import {CommonColors} from "@mui/material/styles/createPalette";
 import LogIn from "./components/LogIn/LogIn";
+import {Auth} from "aws-amplify";
 
 declare module "@mui/joy/styles" {
     interface Palette {
@@ -208,105 +207,144 @@ function ColorSchemeToggle() {
 }
 
 export default function App() {
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    // Déclenché au chargement de la page
+    useEffect(() => {
+        setLoading(true);
+        // On vérifie si l'utilisateur est connecté
+        assessLoggedInState();
+        setLoading(false)
+    }, [])
+
+    // Navigation
     const navigate = useNavigate();
-    const [isloggedIn, setIsloggedIn] = useState(false);
 
-    return (
-        <CssVarsProvider disableTransitionOnChange theme={deepmerge(muiTheme, joyTheme)}>
-            <GlobalStyles<Theme>
-                styles={(theme) => ({
-                    body: {
-                        margin: 0,
-                        fontFamily: theme.vars.fontFamily.body,
-                    },
-                })}
-            />
-            {drawerOpen && (
-                <Layout.SideDrawer onClose={() => setDrawerOpen(false)}>
-                    <Navigation />
-                </Layout.SideDrawer>
-            )}
-            <Layout.Root
-                sx={{
-                    gridTemplateColumns: {
-                        xs: '1fr',
-                        sm: 'minmax(64px, 200px) minmax(450px, 1fr)',
-                        md: 'minmax(160px, 300px) minmax(600px, 1fr)',
-                    },
-                    ...(drawerOpen && {
-                        height: '100vh',
-                        overflow: 'hidden',
-                    }),
-                }}
-            >
-                <Layout.Header>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            gap: 1.5,
-                        }}
-                    >
-                        <IconButton
-                            variant="outlined"
-                            size="sm"
-                            onClick={() => setDrawerOpen(true)}
-                            sx={{ display: { sm: 'none' } }}
+    // états
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState();
+    const [group, setGroup]: Array<any> = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    // fonctions
+    async function assessLoggedInState() {
+        Auth.currentAuthenticatedUser().then(
+            (user) => {
+                setLoggedIn(true);
+                setGroup(user.signInUserSession.accessToken.payload["cognito:groups"]);
+            }
+        ).catch(() => {
+            setLoggedIn(false);
+            navigate("/login");
+        })
+    }
+
+    function getUser(user: any) {
+        setUser(user);
+    }
+
+    function onSignIn() {
+        setLoggedIn(true);
+    }
+
+    if(loading) {
+        return(
+            <Box sx={{display: 'flex', flexDirection: "column", justifyContent: "center", alignItems:'center', width: "100%", height: "100vh"}}>
+                <ReactLoading color={"black"} type="spin"/>
+            </Box>
+        )
+    } else {
+        return (
+            <CssVarsProvider disableTransitionOnChange theme={deepmerge(muiTheme, joyTheme)}>
+                <GlobalStyles<Theme>
+                    styles={(theme) => ({
+                        body: {
+                            margin: 0,
+                            fontFamily: theme.vars.fontFamily.body,
+                        },
+                    })}
+                />
+                {drawerOpen && (
+                    <Layout.SideDrawer onClose={() => setDrawerOpen(false)}>
+                        <Navigation />
+                    </Layout.SideDrawer>
+                )}
+                <Layout.Root
+                    sx={{
+                        gridTemplateColumns: {
+                            xs: '1fr',
+                            sm: 'minmax(64px, 200px) minmax(450px, 1fr)',
+                            md: 'minmax(160px, 300px) minmax(600px, 1fr)',
+                        },
+                        ...(drawerOpen && {
+                            height: '100vh',
+                            overflow: 'hidden',
+                        }),
+                    }}
+                >
+                    <Layout.Header>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 1.5,
+                            }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-                        <IconButton
-                            size="sm"
-                            variant="plain"
-                            sx={{ display: { xs: 'none', sm: 'inline-flex' }}}
-                            onClick={() => navigate('/')}
-                        >
-                            <img onClick={() => window.location.reload()} style={{width: "75px"}} src={Logo} alt={"Decision network logo"}/>
-                        </IconButton>
-                        <Box sx={{
-                            borderLeft: '1px solid',
-                            borderColor: 'background.level2',
-                        }}>
-                            <Typography className={"main-title"} onClick={() => navigate("/")} marginLeft={"1rem"}
-                                        fontSize={"calc(10px + 3.3vmin)"} fontWeight="600">
-                                Espace Facturation
-                            </Typography>
+                            <IconButton
+                                variant="outlined"
+                                size="sm"
+                                onClick={() => setDrawerOpen(true)}
+                                sx={{ display: { sm: 'none' } }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <IconButton
+                                size="sm"
+                                variant="plain"
+                                sx={{ display: { xs: 'none', sm: 'inline-flex' }}}
+                                onClick={() => navigate('/')}
+                            >
+                                <img onClick={() => window.location.reload()} style={{width: "75px"}} src={Logo} alt={"Decision network logo"}/>
+                            </IconButton>
+                            <Box sx={{
+                                borderLeft: '1px solid',
+                                borderColor: 'background.level2',
+                            }}>
+                                <Typography className={"main-title"} onClick={() => navigate("/")} marginLeft={"1rem"}
+                                            fontSize={"calc(10px + 3.3vmin)"} fontWeight="600">
+                                    Espace Facturation
+                                </Typography>
+                            </Box>
                         </Box>
-                    </Box>
-                    <ColorSchemeToggle />
-                </Layout.Header>
-                <Layout.SideNav>
-                    <Navigation loggedIn={isloggedIn}/>
-                </Layout.SideNav>
-                <Layout.Main>
-
-                    {
-                        isloggedIn ?
-                            <Routes>
-                                <Route path="*" element={<Dashboard/>}/>
-                                <Route path="/import-data" element={<Import/>}/>
-                                <Route path="/data/achats" element={<Achats/>}/>
-                                <Route path="/data/factures" element={<Factures/>}/>
-                                <Route path="/data/banque" element={<Banque/>}/>
-                                <Route path="/tools" element={<Tools/>}/>
-                            </Routes>
-                            :
-                            <Routes>
-                                <Route path="*" element={<LogIn/>}/>
-                            </Routes>
-                    }
-
-
-                </Layout.Main>
-
-                <Layout.Footer>
-                    <Box>
-                        <Link underline={"none"} variant={"body2"} href="http://decision-network.eu/">Decision Network © 2022</Link>
-                    </Box>
-                </Layout.Footer>
-            </Layout.Root>
-        </CssVarsProvider>
-    );
+                        <ColorSchemeToggle />
+                    </Layout.Header>
+                    <Layout.SideNav>
+                        <Navigation loggedIn={loggedIn}/>
+                    </Layout.SideNav>
+                    <Layout.Main>
+                        {
+                            loggedIn || loading ?
+                                <Routes>
+                                    <Route path={"*"} element={<Dashboard {...group} ></Dashboard>}></Route>
+                                    <Route path="/import-data" element={<Import/>}/>
+                                    <Route path="/data/achats" element={<Achats/>}/>
+                                    <Route path="/data/factures" element={<Factures/>}/>
+                                    <Route path="/data/banque" element={<Banque/>}/>
+                                    <Route path="/tools" element={<Tools/>}/>
+                                </Routes>
+                                :
+                                <Routes>
+                                    <Route path="/login" element={<LogIn onSignIn={onSignIn} getUser={getUser}/>}/>
+                                </Routes>
+                        }
+                    </Layout.Main>
+                    <Layout.Footer>
+                        <Box>
+                            <Link underline={"none"} variant={"body2"} href="http://decision-network.eu/">Decision Network © 2022</Link>
+                        </Box>
+                    </Layout.Footer>
+                </Layout.Root>
+            </CssVarsProvider>
+        );
+    }
 }
